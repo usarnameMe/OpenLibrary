@@ -30,11 +30,7 @@ class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
         return BookOutputSerializer
 
 
-class BookRequestViewSet(viewsets.ModelViewSet, LoginRequiredMixin):
+class BookRequestViewSet(viewsets.ModelViewSet):
+    queryset = BookRequest.objects.all()  # Temporarily return all requests
     serializer_class = BookRequestSerializer
     permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        if not self.request.user.is_authenticated:
-            raise PermissionDenied("Authentication credentials were not provided.")
-        return BookRequest.objects.filter(owner=self.request.user)

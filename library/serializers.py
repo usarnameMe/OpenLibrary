@@ -57,19 +57,21 @@ logger = logging.getLogger(__name__)
 
 
 class BookRequestSerializer(serializers.ModelSerializer):
-    book = serializers.PrimaryKeyRelatedField(queryset=Book.objects.all())
+    book_id = serializers.IntegerField(write_only=True)
 
     class Meta:
         model = BookRequest
-        fields = ['id', 'book', 'borrower', 'owner', 'status', 'created_at']
-        read_only_fields = ['id', 'status', 'created_at']
+        fields = ['id', 'book_id', 'borrower', 'owner', 'status', 'created_at']
 
-    def validate(self, data):
-        logger.debug(f"Validating data for BookRequest: {data}")
-        if 'book' not in data:
-            logger.error("Book field is missing.")
-            raise serializers.ValidationError({"book": "This field is required."})
-        if not data['book'].is_available:
-            logger.error(f"Book with ID {data['book'].id} is not available.")
-            raise serializers.ValidationError({"book": "This book is not available."})
-        return data
+    def validate_book_id(self, value):
+        try:
+            book = Book.objects.get(id=value)
+        except Book.DoesNotExist:
+            raise serializers.ValidationError("This book does not exist.")
+        return value
+
+    def create(self, validated_data):
+        book_id = validated_data.pop('book_id')
+        book = Book.objects.get(id=book_id)
+        book_request = BookRequest.objects.create(book=book, **validated_data)
+        return book_request
