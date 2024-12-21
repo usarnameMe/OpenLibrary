@@ -47,6 +47,7 @@ pyinstaller==6.11.0
 pyinstaller-hooks-contrib==2024.9
 PyJWT==2.9.0
 PySocks==1.7.1
+python-dotenv==1.0.1
 pytz==2024.2
 PyYAML==6.0.2
 redis==5.2.0
@@ -69,5 +70,3 @@ websocket-client==1.8.0
 Werkzeug==3.0.4
 wsproto==1.2.0
 yarl==1.17.1
-
-self~=2020.12.3

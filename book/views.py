@@ -27,7 +27,6 @@ class BookFilter(FilterSet):
         fields = ['title', 'author', 'genre', 'condition', 'is_available']
 
 
-# Book Views
 class BookListCreateView(generics.ListCreateAPIView):
     queryset = Book.objects.all()
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -83,7 +82,6 @@ class GenreDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
-# Condition Views
 class ConditionListCreateView(generics.ListCreateAPIView):
     queryset = Condition.objects.all()
     serializer_class = ConditionSerializer

@@ -1,4 +1,3 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework import generics, permissions, viewsets
 from .models import BookRequest, Author
 from .serializers import (

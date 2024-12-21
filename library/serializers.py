@@ -80,5 +80,7 @@ class BookRequestSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         book_id = validated_data.pop('book_id')
         book = Book.objects.get(id=book_id)
+        if book.owner == self.context['request'].user:
+            raise serializers.ValidationError("You cannot request your own book.")
         book_request = BookRequest.objects.create(book=book, **validated_data)
         return book_request
