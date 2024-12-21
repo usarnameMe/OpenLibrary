@@ -4,7 +4,6 @@ import logging
 from book.models import Book
 
 
-
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author

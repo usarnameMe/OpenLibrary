@@ -73,16 +73,17 @@ class BookInputSerializer(serializers.ModelSerializer):
 
         authors_data = validated_data.pop("author", None)
         if authors_data:
-            self.handle_authors(instance=instance, authors_data=authors_data)
+            authors_objs = self.handle_authors(authors_data=authors_data)
+            instance.author.set(authors_objs)
 
         genre_data = validated_data.pop("genre", None)
         if genre_data:
-            genre = Genre.objects.get(name=genre_data)
+            genre, _ = Genre.objects.get_or_create(name=genre_data)
             instance.genre = genre
 
         condition_data = validated_data.pop("condition", None)
         if condition_data:
-            condition = Condition.objects.get(description=condition_data)
+            condition, _ = Condition.objects.get_or_create(description=condition_data)
             instance.condition = condition
 
         for attr, value in validated_data.items():

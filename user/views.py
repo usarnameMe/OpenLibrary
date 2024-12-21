@@ -1,6 +1,6 @@
-from django.contrib.auth import authenticate, logout, update_session_auth_hash
+from django.contrib.auth import authenticate, logout
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.authtoken.models import Token

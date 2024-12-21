@@ -1,6 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework import generics, permissions, viewsets
-from rest_framework.exceptions import PermissionDenied
 from .models import BookRequest, Author
 from .serializers import (
     BookInputSerializer, BookOutputSerializer, BookRequestSerializer, AuthorSerializer
