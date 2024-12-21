@@ -64,10 +64,16 @@ class BookRequestSerializer(serializers.ModelSerializer):
         fields = ['id', 'book_id', 'borrower', 'owner', 'status', 'created_at']
 
     def validate_book_id(self, value):
+        logger.debug(f"Validating book ID: {value}")
         try:
             book = Book.objects.get(id=value)
+            logger.debug(f"Book found: {book.title} (ID: {book.id})")
         except Book.DoesNotExist:
+            logger.error(f"Book with ID {value} does not exist.")
             raise serializers.ValidationError("This book does not exist.")
+        if not book.is_available:
+            logger.error(f"Book with ID {value} is not available.")
+            raise serializers.ValidationError("This book is currently not available.")
         return value
 
     def create(self, validated_data):
