@@ -1,10 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework import generics, permissions, viewsets
 from rest_framework.exceptions import PermissionDenied
-from .models import Book, BookRequest, Author
+from .models import BookRequest, Author
 from .serializers import (
     BookInputSerializer, BookOutputSerializer, BookRequestSerializer, AuthorSerializer
 )
+from book.models import Book
 
 
 class AuthorListView(generics.ListCreateAPIView):
@@ -31,6 +32,6 @@ class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class BookRequestViewSet(viewsets.ModelViewSet):
-    queryset = BookRequest.objects.all()  # Temporarily return all requests
+    queryset = BookRequest.objects.all()
     serializer_class = BookRequestSerializer
     permission_classes = [permissions.IsAuthenticated]

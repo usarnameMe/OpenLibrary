@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from book.models import Book  # Import the Book model from book.models
 
 User = get_user_model()
-
 
 class Author(models.Model):
     name = models.CharField(max_length=255, unique=True)
@@ -10,20 +10,17 @@ class Author(models.Model):
     def __str__(self):
         return self.name
 
-
 class Genre(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
         return self.name
 
-
 class Condition(models.Model):
     description = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
         return self.description
-
 
 class Location(models.Model):
     address = models.TextField()
@@ -35,21 +32,6 @@ class Location(models.Model):
         state_part = f", {self.state}" if self.state else ""
         return f"{self.address}, {self.city}{state_part}, {self.zip_code}"
 
-
-class Book(models.Model):
-    title = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
-    author = models.ManyToManyField(Author, related_name="books")
-    genre = models.ForeignKey(Genre, on_delete=models.SET_NULL, null=True, related_name="books")
-    condition = models.ForeignKey(Condition, on_delete=models.SET_NULL, null=True, related_name="books")
-    location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, related_name="books")
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="library_owned_books")
-    is_available = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.title
-
-
 class BookRequest(models.Model):
     PENDING = 'Pending'
     APPROVED = 'Approved'
@@ -60,7 +42,7 @@ class BookRequest(models.Model):
         (REJECTED, 'Rejected'),
     ]
 
-    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='requests')
+    book = models.ForeignKey('book.Book', on_delete=models.CASCADE, related_name='requests')  # Reference book from book.models
     borrower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='library_borrowed_requests')
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='library_owned_requests')
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=PENDING)
